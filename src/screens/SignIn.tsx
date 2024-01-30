@@ -1,4 +1,6 @@
+import React, { useState } from 'react';
 import {
+    Alert,
     View,
     Text,
     StyleSheet,
@@ -7,11 +9,74 @@ import {
     TextInput
 } from 'react-native';
 
-import { light } from '../themes/light';
 import { Feather } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import BackButton from '../components/BackButton';
+import { light } from '../themes/light';
 
 export default function SignIn() {
+
+    const [fullName, setFullName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleSignIp = async () => {
+
+        // Lógica de validação
+        if (!fullName.trim() || !phoneNumber.trim() || !password.trim() || !confirmPassword.trim()) {
+            Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+            return;
+        }
+
+        if (phoneNumber.length !== 9 || phoneNumber[0] !== '9') {
+            Alert.alert('Erro', 'Número de telefone inválido. Deve ter 9 dígitos e começar com 9.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Erro', 'As senhas não coincidem.');
+            return;
+        }
+
+        // Cria um objeto com os dados do usuário
+        const userData = {
+            fullName,
+            phoneNumber,
+            password,
+        };
+
+        try {
+            // Recupera os dados existentes do AsyncStorage
+            const existingData = await AsyncStorage.getItem('userData');
+            const dataArray = existingData ? JSON.parse(existingData) : [];
+
+            // Adiciona o novo usuário ao array
+            dataArray.push(userData);
+
+            // Armazena o array atualizado no AsyncStorage
+            await AsyncStorage.setItem('userData', JSON.stringify(dataArray));
+
+            Alert.alert('Cadastrado', 'A sua conta foi criada com sucesso.');
+
+            // Limpa os campos após o cadastro
+            setFullName('');
+            setPhoneNumber('');
+            setPassword('');
+            setConfirmPassword('');
+        } catch (error) {
+            console.error('Erro ao armazenar os dados no AsyncStorage:', error);
+        }
+
+        // Demostração
+        Alert.alert('Cadastrado', 'A sua cont foi criada.');
+
+        console.log('Full Name:', fullName);
+        console.log('Phone Number:', phoneNumber);
+        console.log('Password:', password);
+    };
+
     return (
         <View style={styles.container}>
             <BackButton />
@@ -25,6 +90,8 @@ export default function SignIn() {
                     <TextInput
                         style={styles.input}
                         placeholder='Nome completo'
+                        value={fullName}
+                        onChangeText={(text) => setFullName(text)}
                     />
                     <Feather
                         name='user'
@@ -38,6 +105,9 @@ export default function SignIn() {
                     <TextInput
                         style={styles.input}
                         placeholder='Número de telefone'
+                        value={phoneNumber}
+                        onChangeText={(text) => setPhoneNumber(text)}
+                        keyboardType='numeric'
                     />
                     <Feather
                         name='phone'
@@ -51,6 +121,9 @@ export default function SignIn() {
                     <TextInput
                         style={styles.input}
                         placeholder='Palavra-passe'
+                        value={password}
+                        onChangeText={(text) => setPassword(text)}
+                        secureTextEntry
                     />
                     <Feather
                         name='lock'
@@ -64,6 +137,9 @@ export default function SignIn() {
                     <TextInput
                         style={styles.input}
                         placeholder='Confirmar palavra-passe'
+                        value={confirmPassword}
+                        onChangeText={(text) => setConfirmPassword(text)}
+                        secureTextEntry
                     />
                     <Feather
                         name='lock'
@@ -75,7 +151,10 @@ export default function SignIn() {
             </View>
 
             <View style={styles.gSButton}>
-                <TouchableOpacity style={styles.button1} >
+                <TouchableOpacity 
+                    onPress={handleSignIp}
+                    style={styles.button1}
+                >
                     <Text style={styles.label1}>
                         Cadastrar
                     </Text>

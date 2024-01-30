@@ -5,6 +5,7 @@ export declare global{
             SignIn: undefined;
             GettingStart: undefined;
             Home: undefined;
+            AppRoutes: undefined;
             Details: {id:number};
         }
     }

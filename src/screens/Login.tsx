@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { 
+    Alert,
     View, 
     Text, 
     StyleSheet, 
@@ -7,11 +9,62 @@ import {
 } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { light } from '../themes/light';
 import BackButton from '../components/BackButton';
 
 export default function Login() {
+
+    const navigation = useNavigation();
+
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+
+    // useEffect(() => {
+    //     // Verificar se há dados de usuário no AsyncStorage ao carregar o componente
+    //     checkIfUserLoggedIn();
+    // }, []);
+
+    // const checkIfUserLoggedIn = async () => {
+    //     try {
+    //         const userData = await AsyncStorage.getItem('userData');
+    //         if (userData) {
+    //             // Se houver dados de usuário, você pode redirecionar para a tela principal ou tomar outras ações
+    //             navigation.navigate('AppRoutes');
+    //         }
+    //     } catch (error) {
+    //         console.error('Erro ao verificar dados de usuário no AsyncStorage:', error);
+    //     }
+    // };
+
+    const handleLogin = async () => {
+        try {
+            const userData = await AsyncStorage.getItem('userData');
+    
+            if (userData) {
+                const dataArray = JSON.parse(userData);
+                const user = dataArray.find(
+                    (user) => user.phoneNumber === phoneNumber && user.password === password
+                );
+    
+                if (user) {
+                    // Salva o usuário logado no novo storage 'currentUser'
+                    await AsyncStorage.setItem('currentUser', JSON.stringify(user));
+    
+                    // Navega para a tela principal
+                    navigation.navigate('AppRoutes');
+                } else {
+                    Alert.alert('Erro', 'Número de telefone ou senha incorretos.');
+                }
+            } else {
+                Alert.alert('Erro', 'Nenhum usuário cadastrado. Cadastre-se primeiro.');
+            }
+        } catch (error) {
+            console.error('Erro ao verificar dados de usuário no AsyncStorage:', error);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -26,6 +79,9 @@ export default function Login() {
                     <TextInput
                         style={styles.input}
                         placeholder='Número de telefone'
+                        value={phoneNumber}
+                        onChangeText={(text) => setPhoneNumber(text)}
+                        keyboardType='numeric'
                     />
                     <Feather
                         name='phone'
@@ -39,6 +95,9 @@ export default function Login() {
                     <TextInput
                         style={styles.input}
                         placeholder='Sua palavra-passe'
+                        value={password}
+                        onChangeText={(text) => setPassword(text)}
+                        secureTextEntry
                     />
                     <Feather
                         name='lock'
@@ -50,7 +109,10 @@ export default function Login() {
             </View>
 
             <View style={styles.gSButton}>
-                <TouchableOpacity style={styles.button1} >
+                <TouchableOpacity 
+                    onPress={handleLogin}
+                    style={styles.button1}
+                >
                     <Text style={styles.label1}>
                         Acessar
                     </Text>

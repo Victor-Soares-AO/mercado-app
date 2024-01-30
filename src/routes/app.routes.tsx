@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import MainRoutes from "./main.routes";
 import ShoppingCart from "../screens/ShoppingCart";
 import Logout from "../components/Logout";
+import Profile from "../screens/Profile";
 
 const TabNavigation = createBottomTabNavigator();
 
@@ -54,8 +55,8 @@ export default function AppRoutes(){
             />
 
             <TabNavigation.Screen
-                name="Logout"
-                component={Logout}
+                name="Profile"
+                component={Profile}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Feather
