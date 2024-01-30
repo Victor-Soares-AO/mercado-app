@@ -1,27 +1,21 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    TextInput
+} from 'react-native';
+
 import { light } from '../themes/light';
 import { Feather } from '@expo/vector-icons'
+import BackButton from '../components/BackButton';
+
 export default function SignIn() {
     return (
         <View style={styles.container}>
-            <TouchableOpacity
-                style={{
-                    position: 'absolute',
-                    top: 56,
-                    left: 20
+            <BackButton />
 
-                }}>
-
-                <View
-                >
-                    <Feather
-                        name='arrow-left'
-                        size={32}
-
-                    />
-                </View>
-
-            </TouchableOpacity>
             <Text style={styles.title}>
                 Crie uma conta na plataforma
             </Text>
@@ -87,14 +81,26 @@ export default function SignIn() {
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button2}>
+                <View style={styles.button2}>
                     <Text style={styles.label2}>
                         Já possui uma conta?
                     </Text>
-                    <Text style={[styles.label2, { color: light.colors.primary }]} >
-                        Acesse a plataforma
-                    </Text>
-                </TouchableOpacity>
+
+                    <TouchableOpacity>
+                        <Text
+                            style={[
+                                styles.label2,
+                                {
+                                    color: light.colors.primary,
+                                    fontWeight: '600',
+                                    marginTop: 2
+                                }
+                            ]}
+                        >
+                            Acesse a plataforma
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     )
@@ -112,7 +118,8 @@ const styles = StyleSheet.create({
         color: light.colors.black,
         paddingHorizontal: 32,
         textAlign: 'center',
-        lineHeight: 42
+        lineHeight: 42,
+        fontWeight: '700'
     },
     subtitle: {
         fontSize: light.fontSize.lg,
@@ -136,7 +143,6 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         justifyContent: 'center',
         alignItems: 'center'
-
     },
     button2: {
         width: '100%',
@@ -146,7 +152,8 @@ const styles = StyleSheet.create({
     },
     label1: {
         color: light.colors.white,
-        fontSize: light.fontSize.lg
+        fontSize: light.fontSize.lg,
+        fontWeight: '600'
     },
     label2: {
         fontSize: light.fontSize.lg
@@ -161,19 +168,16 @@ const styles = StyleSheet.create({
         fontSize: light.fontSize.lg,
         paddingHorizontal: 16,
         paddingLeft: 50
-
     },
     group: {
         width: '100%',
         paddingHorizontal: 20,
         marginTop: 30
-
     },
     icon: {
         position: 'absolute',
         left: 16,
         top: 16
-
     },
     inputWrapper: {
         width: '100%',

@@ -1,12 +1,12 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Login from '../screens/Login';
-import Register from "../screens/Register";
-import GettingStart from "../screens/GettingStart";
+import SignIn from '../screens/SignIn';
+import GettingStart from '../screens/GettingStart';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
-export default function AuthStack() {
+export default function AuthRoutes() {
     return (
         <Stack.Navigator
             screenOptions={{
@@ -24,8 +24,8 @@ export default function AuthStack() {
             />
 
             <Stack.Screen
-                name="Register"
-                component={Register}
+                name="SignIn"
+                component={SignIn}
             />
         </Stack.Navigator>
     )

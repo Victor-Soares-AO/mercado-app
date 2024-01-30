@@ -1,27 +1,22 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity, 
+    TextInput
+} from 'react-native';
+
+import { Feather } from '@expo/vector-icons';
+
 import { light } from '../themes/light';
-import { Feather } from '@expo/vector-icons'
+import BackButton from '../components/BackButton';
+
 export default function Login() {
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity
-                style={{
-                    position: 'absolute',
-                    top: 56,
-                    left: 20
+            <BackButton />
 
-                }}>
-
-                <View
-                >
-                    <Feather
-                        name='arrow-left'
-                        size={32}
-
-                    />
-                </View>
-
-            </TouchableOpacity>
             <Text style={styles.title}>
                 Acesse a plataforma do mercado
             </Text>
